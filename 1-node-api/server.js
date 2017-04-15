@@ -84,6 +84,40 @@ router.route('/offers/:offer_id')
                 res.send(err);
             res.json(offer);
         });
+    })
+
+    // update the offer with this id (accessed at PUT http://localhost:8080/api/offers/:offer_id)
+    .put(function(req, res) {
+
+        // use our Offer model to find the offer we want
+        Offer.findById(req.params.offer_id, function(err, offer) {
+
+            if (err)
+                res.send(err);
+
+            offer.name = req.body.name;  // update the offers info
+
+            // save the offer
+            offer.save(function(err) {
+                if (err)
+                    res.send(err);
+
+                res.json({ message: 'Offer updated!' });
+            });
+
+        });
+    })
+
+    // delete the offer with this id (accessed at DELETE http://localhost:8080/api/offers/:offer_id)
+    .delete(function(req, res) {
+        Offer.remove({
+            _id: req.params.offer_id
+        }, function(err, offer) {
+            if (err)
+                res.send(err);
+
+            res.json({ message: 'Successfully deleted' });
+        });
     });
 
 
