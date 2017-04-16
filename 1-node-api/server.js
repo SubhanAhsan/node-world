@@ -22,10 +22,12 @@ mongoose.connect('mongodb://node:bombay@cluster0-shard-00-00-inw4q.mongodb.net:2
 //models
 var Offer       = require('./app/models/offer');
 var Vendor      = require('./app/models/vendor');
+var Location      = require('./app/models/location');
 
 //routes
 var offers_router    = require('./app/routes/offers');
 var vendors_router   = require('./app/routes/vendors');
+var locations_router   = require('./app/routes/locations');
 
 
 // ROUTES FOR OUR API
@@ -53,6 +55,7 @@ router.get('/', function(req, res) {
 app.use('/api', router); //TODO - use this route for UI --  remove /api
 app.use('/api', offers_router);
 app.use('/api', vendors_router);
+app.use('/api', locations_router);
 
 // START THE SERVER
 // =============================================================================

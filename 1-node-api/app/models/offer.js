@@ -18,7 +18,8 @@ var OfferSchema   = new Schema({
     },
     vendor: {                   //vendor -- 
         vendorid:{
-            type: Number
+            type: Schema.Types.ObjectId,
+            turnOn: false
         },
         name: {
             type: String        
@@ -26,6 +27,15 @@ var OfferSchema   = new Schema({
         logo: {
             type: String        //vendor company logo
         }          
+    },
+    location:{                  //TODO - location will be multivalue/array
+        locationid:{
+            type: Schema.Types.ObjectId,
+            turnOn: false
+        },
+        name:{
+            type: String
+        }
     }
 
 });

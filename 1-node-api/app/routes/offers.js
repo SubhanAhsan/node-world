@@ -14,7 +14,15 @@ router.route('/offers')
     .post(function(req, res) {
         
         var offer = new Offer();      // create a new instance of the Offer model
-        offer.name = req.body.name;  // set the offer name (comes from the request)
+        offer.name          = req.body.name;  // set the offer name (comes from the request)
+        offer.desc          = req.body.desc;
+        offer.offer_start   = req.body.offer_start;
+        offer.offer_end     = req.body.offer_end;
+        offer.vendor.vendorid   = req.body.vendor.vendorid;
+        offer.vendor.name       = req.body.vendor.name;
+        offer.vendor.logo       = req.body.vendor.logo;
+        offer.location.locationid   = req.body.location.locationid;
+        offer.location.name         = req.body.location.name;
 
         // save the offer and check for errors
         offer.save(function(err) {
@@ -59,6 +67,7 @@ router.route('/offers/:offer_id')
             if (err)
                 res.send(err);
 
+            //TODO
             offer.name = req.body.name;  // update the offers info
 
             // save the offer
