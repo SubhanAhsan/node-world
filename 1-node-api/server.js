@@ -20,7 +20,12 @@ var mongoose   = require('mongoose');
 mongoose.connect('mongodb://node:bombay@cluster0-shard-00-00-inw4q.mongodb.net:27017,cluster0-shard-00-01-inw4q.mongodb.net:27017,cluster0-shard-00-02-inw4q.mongodb.net:27017/nodedb?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'); // connect to our database
 
 //models
-var Offer     = require('./app/models/offer');
+var Offer       = require('./app/models/offer');
+var Vendor      = require('./app/models/vendor');
+
+//routes
+var offers_router    = require('./app/routes/offers');
+var vendors_router   = require('./app/routes/vendors');
 
 
 // ROUTES FOR OUR API
@@ -41,90 +46,13 @@ router.get('/', function(req, res) {
 });
 
 // more routes for our API will happen here
-
-// on routes that end in /offers
-// ----------------------------------------------------
-router.route('/offers')
-
-    // create an offer (accessed at POST http://localhost:8080/api/offers)
-    .post(function(req, res) {
-        
-        var offer = new Offer();      // create a new instance of the Offer model
-        offer.name = req.body.name;  // set the offer name (comes from the request)
-
-        // save the offer and check for errors
-        offer.save(function(err) {
-            if (err)
-                res.send(err);
-
-            res.json({ message: 'Offer created!' });
-    })
-
-    })
-
- // get all the offers (accessed at GET http://localhost:8080/api/offers)
-    .get(function(req, res) {
-        Offer.find(function(err, offers) {
-            if (err)
-                res.send(err);
-
-            res.json(offers);
-        });
-    });
-
-
-// on routes that end in /offers/:offer_id
-// ----------------------------------------------------
-router.route('/offers/:offer_id')
-
-    // get the offer with that id (accessed at GET http://localhost:8080/api/offers/:offer_id)
-    .get(function(req, res) {
-        Offer.findById(req.params.offer_id, function(err, offer) {
-            if (err)
-                res.send(err);
-            res.json(offer);
-        });
-    })
-
-    // update the offer with this id (accessed at PUT http://localhost:8080/api/offers/:offer_id)
-    .put(function(req, res) {
-
-        // use our Offer model to find the offer we want
-        Offer.findById(req.params.offer_id, function(err, offer) {
-
-            if (err)
-                res.send(err);
-
-            offer.name = req.body.name;  // update the offers info
-
-            // save the offer
-            offer.save(function(err) {
-                if (err)
-                    res.send(err);
-
-                res.json({ message: 'Offer updated!' });
-            });
-
-        });
-    })
-
-    // delete the offer with this id (accessed at DELETE http://localhost:8080/api/offers/:offer_id)
-    .delete(function(req, res) {
-        Offer.remove({
-            _id: req.params.offer_id
-        }, function(err, offer) {
-            if (err)
-                res.send(err);
-
-            res.json({ message: 'Successfully deleted' });
-        });
-    });
-
-
+//
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
-app.use('/api', router);
+app.use('/api', router); //TODO - use this route for UI --  remove /api
+app.use('/api', offers_router);
+app.use('/api', vendors_router);
 
 // START THE SERVER
 // =============================================================================
